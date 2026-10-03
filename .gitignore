@@ -1,0 +1,42 @@
+# zależności
+node_modules/
+
+# Expo
+.expo/
+dist/
+web-build/
+expo-env.d.ts
+
+# Natywne
+.kotlin/
+*.orig.*
+*.jks
+*.p8
+*.p12
+*.key
+*.mobileprovision
+/ios
+/android
+
+# Metro
+.metro-health-check*
+
+# logi
+npm-debug.*
+yarn-debug.*
+yarn-error.*
+
+# system
+.DS_Store
+*.pem
+
+# zmienne środowiskowe (klucze NIE trafiają do repo)
+.env
+.env*.local
+
+# TypeScript
+*.tsbuildinfo
+
+# Supabase (lokalne pliki CLI)
+supabase/.branches
+supabase/.temp

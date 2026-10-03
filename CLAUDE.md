@@ -41,23 +41,39 @@ Jeśli zadanie jest sprzeczne z `ZASADY_DZIALANIA.md`, **zatrzymaj się i zapyta
 
 ## Komendy
 
-> Uzupełnić po utworzeniu szkieletu projektu (Etap 0).
-
 ```bash
-npm run dev          # start aplikacji web
-npm run typecheck    # tsc --noEmit
-npm run lint
-npm test             # testy TS
-supabase start       # lokalny Supabase
-supabase db reset    # migracje + seed od zera
-supabase test db     # testy SQL (pgTAP)
-supabase gen types typescript --local > lib/types/database.ts
+npm run web            # start aplikacji web (Expo SDK 57)
+npm run typecheck      # tsc --noEmit (najpierw raz `npm run web`, żeby powstał expo-env.d.ts)
+npm run lint           # expo lint
+npm run format         # prettier --write .
+npm run build:web      # eksport statycznej strony do dist/
+
+# Baza – z Supabase CLI i Dockerem
+supabase start
+supabase db reset      # migracje + seed od zera
+supabase test db       # testy pgTAP z supabase/tests
+npm run db:types       # typy TS z bazy do lib/types/database.ts
+
+# Baza – bez Dockera (zwykły PostgreSQL 16 + pgTAP), tak samo jak w CI
+npm run db:test
+TEST_DB_NAME=grafik_test python3 scripts/db/gen-types.py > lib/types/database.ts
 ```
+
+## Mapa kodu
+
+- `supabase/migrations/` – schemat (`…_schema.sql`), uprawnienia (`…_rls.sql`), układanie grafiku (`…_scheduling.sql`), zamiany (`…_swaps.sql`).
+- Funkcje wewnętrzne bazy są w schemacie `app_private` (niedostępny z API); RPC dla aplikacji w `public`.
+- Powiadomienia trafiają do tabeli `notifications` (skrzynka); wysyłka e-maili to osobna Edge Function (do zrobienia).
+- `supabase/tests/00_helpers.sql` – pomocnicy testów: `tests.create_employee`, `tests.login_as`, `tests.make_shift`, `tests.make_month`…
+- `lib/types/database.ts` – typy generowane, nie edytuj ręcznie.
+- `lib/auth.tsx` – sesja i profil pracownika (`useAuth()`), `lib/format.ts` – polskie daty bez lokalnych getterów `Date`.
 
 ## Jak pracujemy
 
 - Przed implementacją większej funkcji: **najpierw plan** (plan mode), dopiero potem kod.
 - Reguły biznesowe: **najpierw test** (SQL lub TS) opisujący przypadek z `ZASADY_DZIALANIA.md`, potem implementacja.
+- W testach pgTAP nie łącz w jednym zapytaniu wywołania funkcji zmieniającej dane i sprawdzenia jej efektu – zapytanie widzi stan sprzed wywołania. Najpierw `do $$ begin perform …; end $$;`, potem asercja.
+- Po każdej zmianie schematu: nowa migracja → testy → regeneracja `lib/types/database.ts`.
 - Po zmianach zawsze uruchom `typecheck`, `lint` i testy, zanim uznasz zadanie za skończone.
 - Każde zadanie na osobnej gałęzi, zmiany przez pull request. **Nie pushuj na `main`.**
 - Po ukończeniu zadania odhacz je w `docs/PLAN_IMPLEMENTACJI.md`.
@@ -68,4 +84,5 @@ supabase gen types typescript --local > lib/types/database.ts
 - Klucze Supabase tylko w `.env` (w `.gitignore`). Nigdy nie commituj `service_role` key; w kodzie frontendu tylko `anon` key.
 - Narzędzia z dostępem do bazy (CLI, MCP) podłączaj **tylko do dev**, nigdy do produkcji.
 - Każda nowa tabela ma włączone RLS i polityki dla trzech ról, z testem.
+- Supabase domyślnie pozwala rolom API wywoływać każdą nową funkcję. Migracja dodająca funkcje kończy się więc `revoke execute … from public, anon` (i grantem dla `authenticated` tylko tam, gdzie trzeba). Funkcje wewnętrzne trzymaj w schemacie `app_private`, a RPC w `public` niech same sprawdzają rolę (`is_manager()`, `is_owner()`).
 - Dane pracowników to dane osobowe – nie loguj ich niepotrzebnie i nie wrzucaj prawdziwych danych do `seed.sql`.

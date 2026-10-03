@@ -12,20 +12,20 @@ Ten dokument opisuje **jak aplikacja ma działać** z punktu widzenia ciastkarni
 
 ## 2. Role
 
-| Rola | Kto | Co może |
-|---|---|---|
-| **Iza** (właścicielka) | Iza | Wszystko, co Halina, plus: dodawanie, archiwizowanie i usuwanie grafików, zarządzanie pracownikami i ich rolami |
-| **Halina** (układająca) | Halina | Otwiera zbieranie dyspozycyjności, układa i publikuje grafiki, edytuje zmiany, zatwierdza zamiany osób z flagą zatwierdzania, dostaje alerty |
-| **Pracownik** | 12–16 osób | Widzi opublikowany grafik i swoje zmiany, zgłasza dyspozycyjność, wysyła i przyjmuje prośby o zamianę |
+| Rola                    | Kto        | Co może                                                                                                                                      |
+| ----------------------- | ---------- | -------------------------------------------------------------------------------------------------------------------------------------------- |
+| **Iza** (właścicielka)  | Iza        | Wszystko, co Halina, plus: dodawanie, archiwizowanie i usuwanie grafików, zarządzanie pracownikami i ich rolami                              |
+| **Halina** (układająca) | Halina     | Otwiera zbieranie dyspozycyjności, układa i publikuje grafiki, edytuje zmiany, zatwierdza zamiany osób z flagą zatwierdzania, dostaje alerty |
+| **Pracownik**           | 12–16 osób | Widzi opublikowany grafik i swoje zmiany, zgłasza dyspozycyjność, wysyła i przyjmuje prośby o zamianę                                        |
 
 ## 3. Grafiki (miejsca pracy)
 
-| Grafik | Typ |
-|---|---|
-| Liszki | sprzedaż |
-| Lodołamacz Piekary | sprzedaż |
-| Ogrody | sprzedaż |
-| Produkcja Liszki | produkcja |
+| Grafik             | Typ       |
+| ------------------ | --------- |
+| Liszki             | sprzedaż  |
+| Lodołamacz Piekary | sprzedaż  |
+| Ogrody             | sprzedaż  |
+| Produkcja Liszki   | produkcja |
 
 - Każdy grafik ma **typ**: `sprzedaż` albo `produkcja`. Typ decyduje, kto z kim może się zamieniać.
 - Grafiki dodaje tylko **Iza**. Nowy grafik od razu działa według tych samych zasad co istniejące.
@@ -53,7 +53,7 @@ Ten dokument opisuje **jak aplikacja ma działać** z punktu widzenia ciastkarni
 - Pracownik może mieć **najwyżej jedną zmianę w danym dniu, we wszystkich grafikach łącznie**.
 - Próba przypisania drugiej zmiany tego samego dnia jest **zablokowana**.
 - Komunikat zawsze podaje **grafik, datę i godziny** kolidującej zmiany, np.:
-  > Ania ma już zmianę 14.10 (wtorek) – Ogrody, 10:00–14:00
+  > Ania ma już zmianę 14.10.2026 (środa) – Ogrody, 10:00–14:00
 - Zasada obowiązuje wszędzie: przy układaniu grafiku przez Halinę, przy edycji, przy zamianach.
 
 ## 6. Dyspozycyjność i miesięczny cykl grafiku
@@ -65,7 +65,7 @@ Grafik układa się **co miesiąc**. Przed ułożeniem każdy mówi, kiedy może
    - cały dzień,
    - konkretne godziny (od–do),
    - nie mogę.
-   Dostępny jest skrót "skopiuj z poprzedniego miesiąca".
+     Dostępny jest skrót "skopiuj z poprzedniego miesiąca".
 3. **Przed terminem** osoby, które nic nie wpisały, dostają przypomnienie. Halina widzi listę: kto oddał, kto nie.
 4. **Halina układa grafik** i przy każdej osobie i dniu widzi jej dyspozycyjność (np. zielony – może, czerwony – nie może, szary – nie podała).
 5. **Przypisanie poza dyspozycyjnością = ostrzeżenie, nie blokada.** Halina może świadomie przypisać osobę (np. po rozmowie).
@@ -77,21 +77,23 @@ Status miesiąca: `zbieranie` → `układanie` → `opublikowany`.
 
 ### Kto z kim
 
-| Dział | Może się zamieniać z |
-|---|---|
-| sprzedaż | sprzedażą – także między punktami (np. Ogrody ↔ Liszki) |
-| produkcja | produkcją |
+| Dział     | Może się zamieniać z                                    |
+| --------- | ------------------------------------------------------- |
+| sprzedaż  | sprzedażą – także między punktami (np. Ogrody ↔ Liszki) |
+| produkcja | produkcją                                               |
 
 Zamiana sprzedaż ↔ produkcja jest **zawsze zablokowana**.
 
 ### Dwa tryby prośby
 
 **A. Do konkretnej osoby**
+
 - Pracownik wybiera swoją zmianę → "poproś o zastępstwo" → wybiera osobę.
 - Lista pokazuje **tylko osoby, które mogą przejąć** zmianę (ten sam dział, brak kolizji po zamianie).
 - Adresat klika "przyjmuję" albo "odrzucam". Po odrzuceniu autor może poprosić kogoś innego.
 
 **B. Do wszystkich ("giełda")**
+
 - Powiadomienie dostają tylko osoby, które mogą przejąć zmianę.
 - Przy osobach widać informację, czy zgłosiły dyspozycyjność na ten dzień.
 - **Kto pierwszy, ten bierze.** Po przyjęciu prośba znika u pozostałych.
@@ -101,18 +103,25 @@ Zamiana sprzedaż ↔ produkcja jest **zawsze zablokowana**.
 - **Oddanie** – przejmujący bierze zmianę autora, nic w zamian.
 - **Wymiana** – przejmujący bierze zmianę autora, a autor bierze jedną zmianę przejmującego.
 
+Kto wskazuje zmianę do wymiany:
+
+- W prośbie **do konkretnej osoby** autor może od razu wskazać jej zmianę, którą chce wziąć. Adresat tylko przyjmuje albo odrzuca.
+- Przy prośbie **do wszystkich** chętny może zaproponować w zamian swoją zmianę. Wtedy **autor musi tę propozycję potwierdzić** (status "czeka na Twoje potwierdzenie"). Jeśli odrzuci, prośba wraca na giełdę.
+- Powiadomienie o prośbie do wszystkich dostają osoby, które mogą przejąć zmianę **bez wymiany** (ten sam dział, wolne tego dnia).
+- Na jedną zmianę może być naraz tylko jedna aktywna prośba.
+
 ### Sprawdzanie kolizji – liczy się stan PO zamianie
 
 Aplikacja sprawdza, jak będzie wyglądał grafik obu osób **po** wykonaniu operacji. Jeśli ktokolwiek miałby dwie zmiany jednego dnia – blokada z podaniem grafiku i daty.
 
-| Przykład | Wynik |
-|---|---|
-| Kasia nie ma zmiany 14.10, przejmuje (oddanie) zmianę Ani z 14.10 | ✅ dozwolone |
-| Kasia ma zmianę 14.10, przejmuje (oddanie) zmianę Ani z 14.10 | ❌ blokada – Kasia miałaby dwie zmiany |
-| Ania ma rano Liszki 14.10, Kasia popołudnie Ogrody 14.10 – wymiana | ✅ dozwolone – każda dalej ma jedną zmianę |
-| Ania oddaje pon., bierze śr. Kasi; Ania w śr. wolna, Kasia w pon. wolna | ✅ dozwolone |
-| Ania oddaje pon., bierze śr. Kasi; Ania ma już inną zmianę w śr. | ❌ blokada |
-| Ania (sprzedaż) chce oddać zmianę Tomkowi (produkcja) | ❌ blokada – różne działy |
+| Przykład                                                                | Wynik                                      |
+| ----------------------------------------------------------------------- | ------------------------------------------ |
+| Kasia nie ma zmiany 14.10, przejmuje (oddanie) zmianę Ani z 14.10       | ✅ dozwolone                               |
+| Kasia ma zmianę 14.10, przejmuje (oddanie) zmianę Ani z 14.10           | ❌ blokada – Kasia miałaby dwie zmiany     |
+| Ania ma rano Liszki 14.10, Kasia popołudnie Ogrody 14.10 – wymiana      | ✅ dozwolone – każda dalej ma jedną zmianę |
+| Ania oddaje pon., bierze śr. Kasi; Ania w śr. wolna, Kasia w pon. wolna | ✅ dozwolone                               |
+| Ania oddaje pon., bierze śr. Kasi; Ania ma już inną zmianę w śr.        | ❌ blokada                                 |
+| Ania (sprzedaż) chce oddać zmianę Tomkowi (produkcja)                   | ❌ blokada – różne działy                  |
 
 ### Zatwierdzanie
 
@@ -135,17 +144,17 @@ Aplikacja sprawdza, jak będzie wyglądał grafik obu osób **po** wykonaniu ope
 
 ## 8. Powiadomienia
 
-| Zdarzenie | Kto dostaje |
-|---|---|
-| Otwarcie zbierania dyspozycyjności | wszyscy pracownicy |
-| Przypomnienie przed terminem dyspozycyjności | ci, którzy nie oddali |
-| Publikacja grafiku | wszyscy |
-| Zmiana w opublikowanym grafiku dotycząca pracownika | ten pracownik |
-| Nowa prośba o zamianę | adresat lub wszyscy uprawnieni |
-| Przyjęcie / odrzucenie prośby | autor |
-| Zamiana czeka na zatwierdzenie | Halina |
-| Wykonana zamiana | obie strony + Halina |
-| Brak chętnych 24 h przed zmianą | Halina |
+| Zdarzenie                                           | Kto dostaje                    |
+| --------------------------------------------------- | ------------------------------ |
+| Otwarcie zbierania dyspozycyjności                  | wszyscy pracownicy             |
+| Przypomnienie przed terminem dyspozycyjności        | ci, którzy nie oddali          |
+| Publikacja grafiku                                  | wszyscy                        |
+| Zmiana w opublikowanym grafiku dotycząca pracownika | ten pracownik                  |
+| Nowa prośba o zamianę                               | adresat lub wszyscy uprawnieni |
+| Przyjęcie / odrzucenie prośby                       | autor                          |
+| Zamiana czeka na zatwierdzenie                      | Halina                         |
+| Wykonana zamiana                                    | obie strony + Halina           |
+| Brak chętnych 24 h przed zmianą                     | Halina                         |
 
 W pierwszej wersji powiadomienia idą **e-mailem**. Push przyjdzie z aplikacją mobilną.
 
