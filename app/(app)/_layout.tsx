@@ -1,11 +1,11 @@
 import { Redirect, Tabs } from 'expo-router';
-import { Text } from 'react-native';
+import { Text, type ColorValue } from 'react-native';
 
 import { Button, Loading, Muted, Screen, Title } from '@/components/ui';
 import { colors } from '@/constants/theme';
 import { useAuth } from '@/lib/auth';
 
-function TabIcon({ symbol, color }: { symbol: string; color: string }) {
+function TabIcon({ symbol, color }: { symbol: string; color: ColorValue }) {
   return <Text style={{ color, fontSize: 18 }}>{symbol}</Text>;
 }
 
