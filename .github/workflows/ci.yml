@@ -1,0 +1,59 @@
+name: CI
+
+on:
+  pull_request:
+  push:
+    branches: [main]
+
+jobs:
+  database:
+    name: Baza danych (migracje + testy reguł)
+    runs-on: ubuntu-24.04
+    steps:
+      - uses: actions/checkout@v5
+
+      - name: Zainstaluj pgTAP
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y postgresql-16-pgtap
+
+      - name: Uruchom PostgreSQL 16
+        run: |
+          sudo systemctl start postgresql.service
+          sudo -u postgres psql -c "alter user postgres password 'postgres';"
+
+      - name: Migracje i testy pgTAP
+        env:
+          PGHOST: localhost
+          PGPORT: 5432
+          PGUSER: postgres
+          PGPASSWORD: postgres
+        run: scripts/db/test-local.sh
+
+  app:
+    name: Aplikacja (typy, lint, formatowanie, build web)
+    runs-on: ubuntu-24.04
+    steps:
+      - uses: actions/checkout@v5
+
+      - uses: actions/setup-node@v5
+        with:
+          node-version: 22
+
+      # Po dodaniu package-lock.json do repo zamień na: npm ci
+      - name: Instalacja zależności
+        run: npm install
+
+      # expo-env.d.ts generuje `expo start`; w CI tworzymy go ręcznie.
+      - name: Typy Expo
+        run: echo '/// <reference types="expo/types" />' > expo-env.d.ts
+
+      - run: npm run typecheck
+      - run: npm run lint
+      - run: npm run format:check
+
+      - name: Build web
+        env:
+          EXPO_PUBLIC_SUPABASE_URL: https://example.supabase.co
+          EXPO_PUBLIC_SUPABASE_ANON_KEY: ci-placeholder
+        run: npm run build:web

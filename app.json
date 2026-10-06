@@ -1,0 +1,21 @@
+{
+  "expo": {
+    "name": "Grafik Ciastkarnia Iza",
+    "slug": "grafik-ciastkarnia-iza",
+    "version": "0.1.0",
+    "orientation": "portrait",
+    "scheme": "grafikiza",
+    "userInterfaceStyle": "light",
+    "ios": {
+      "supportsTablet": true
+    },
+    "web": {
+      "bundler": "metro",
+      "output": "single"
+    },
+    "plugins": ["expo-router"],
+    "experiments": {
+      "typedRoutes": true
+    }
+  }
+}

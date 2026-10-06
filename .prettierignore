@@ -1,0 +1,6 @@
+node_modules
+dist
+.expo
+supabase/.temp
+lib/types/database.ts
+package-lock.json
